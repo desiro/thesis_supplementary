@@ -378,187 +378,72 @@ Reference:
     # -----------------------------
       
     
-    [desirda1@chbslx1747:~/tools/BitSeq-c-github]$ parseAlignment
-ERROR: Need at least 1 arguments.
-
-
-Usage: parseAlignment -o <outFileName> -s <trSeqFileName>  [OPTIONS] [alignment file]
-
-Pre-computes probabilities of (observed) reads' alignments.
-   [alignment file] should be in either SAM or BAM format.
-
-
-Options:
-  --help
-    Show this help information.
-
-  --distributionFile=<distributionFileName>
-    Name of file to which read-distribution should be saved.
-
-  --excludeSingletons
-    Exclude single mate alignments for paired-end reads. (default: Off)
-
-  -e <expFileName> ,   --expressionFile=<expFileName>
-    Transcript relative expression estimates --- for better non-uniform read distribution estimation.
-
-  --failed=<failed>
-    File name where to save names of reads that failed to align.
-
-  -f <format> ,   --format=<format>
-    Input format: either SAM, BAM.
-
-  --lenMu=<lenMu>
-    Set mean of log fragment length distribution. (l_frag ~ LogNormal(mu,sigma^2))
-
-  --lenSigma=<lenSigma>
-    Set sigma^2 (or variance) of log fragment length distribution. (l_frag ~ LogNormal(mu,sigma^2))
-
-  --mateNamesDiffer
-    Mates from paired-end reads have different names. (default: Off)
-
-  -l <maxAlignments> ,   --limitA=<maxAlignments>
-    Limit maximum number of alignments per read. (Reads with more alignments are skipped.)
-
-  --noiseMismatches=<numNoiseMismatches>
-    Number of mismatches to be considered as noise. (default: 6)
-
-  -o <outFileName> ,   --outFile=<outFileName>
-    Name of the output file.
-
-  -P <procN> ,   --procN=<procN>
-    Maximum number of threads to be used. This provides speedup mostly when using non-uniform read distribution model (i.e. no --uniform flag). (default: 4)
-
-  -N <readsN> ,   --readsN=<readsN>
-    Total number of reads. This is not necessary if [SB]AM contains also reads with no valid alignments.
-
-  --show1warning
-    Show first alignments that are considered wrong (TID unknown, TID mismatch, wrong strand). (default: Off)
-
-  -t <trInfoFileName> ,   --trInfoFile=<trInfoFileName>
-    File to save transcript information extracted from [BS]AM file and reference.
-
-  -s <trSeqFileName> ,   --trSeqFile=<trSeqFileName>
-    Transcript sequence in FASTA format --- for non-uniform read distribution estimation.
-
-  --trSeqHeader=<trSeqHeader>
-    Transcript sequence header format enables gene name extraction (standard/gencode). (default: standard)
-
-  --uniform
-    Use uniform read distribution. (default: Off)
-
-  --unstranded
-    Paired read are not strand specific. (default: Off)
-
-  -v ,   --verbose
-    Verbose output. (default: Off)
-
-  -V ,   --veryVerbose
-    Very verbose output. (default: Off)
-
-    
-    [desirda1@chbslx1747:~/tools/BitSeq-c-github]$ estimateExpression
-ERROR: Need at least 1 arguments.
-
-
-Usage: estimateExpression -o <outFilePrefix>  [OPTIONS] [prob file]
-
-Estimates expression given precomputed probabilities of (observed) reads' alignments.
-   Uses MCMC sampling algorithm to produce relative abundance or RPKM.
-
-
-Options:
-  --help
-    Show this help information.
-
-  --MCMC_burnIn=<MCMC_burnIn>
-    Length of sampler's burn in period. (default: 1000)
-
-  --MCMC_chainsN=<MCMC_chainsN>
-    Number of parallel chains used. At least two chains will be used. (default: 4)
-
-  --MCMC_dirAlpha=<MCMC_dirAlpha>
-    Alpha parameter for the Dirichlet distribution. (default: 1)
-
-  --MCMC_samplesDOmax
-    Produce maximum number of samples (samplesNmax) in second iteration and quit. (default: Off)
-
-  --MCMC_samplesN=<MCMC_samplesN>
-    Initial number of samples produced. Doubles after every iteration. (default: 1000)
-
-  --MCMC_samplesNmax=<MCMC_samplesNmax>
-    Maximum number of samples produced in one iteration. After producing samplesNmax samples sampler finishes. (default: 50000)
-
-  --MCMC_samplesSave=<MCMC_samplesSave>
-    Number of samples recorder in total. (default: 1000)
-
-  --MCMC_scaleReduction=<MCMC_scaleReduction>
-    Target scale reduction, sampler finishes after this value is met. (default: 1.2)
-
-  -G ,   --gibbs
-    Use Gibbs sampling instead of collapsed Gibbs sampling. (default: Off)
-
-  -o <outFilePrefix> ,   --outPrefix=<outFilePrefix>
-    Prefix for the output files.
-
-  -O <outputType> ,   --outType=<outputType>
-    Output type (theta, RPKM, counts, tau). (default: theta)
-
-  -p <parFileName> ,   --parFile=<parFileName>
-    File containing parameters for the sampler, which can be otherwise specified by --MCMC* options. As the file is checked after every MCMC iteration, the parameters can be adjusted while running.
-
-  -P <procN> ,   --procN=<procN>
-    Limit the maximum number of threads to be used. (Default is the number of MCMC chains.)
-
-  --scaleReduction
-    Use scale reduction as stopping criterion, instead of computing effective sample size. (default: Off)
-
-  -s <seed> ,   --seed=<seed>
-    Random initialization seed.
-
-  --thetaActFile=<thetaActFileName>
-    File for logging noise parameter theta^{act}.
-
-  -t <trInfoFileName> ,   --trInfoFile=<trInfoFileName>
-    File containing transcript information. (Necessary for RPKM)
-
-  -v ,   --verbose
-    Verbose output. (default: Off)
-
-    
-    
-    [desirda1@chbslx1747:~/tools/BitSeq-c-github]$ getVariance
-ERROR: Need at least 1 arguments.
-
-
-Usage: getVariance -o <outFileName>  [OPTIONS] [sampleFiles]
-
-Estimates variance of MCMC samples from 1 or multiple replicates.
-   [sample Files] should contain transposed MCMC samples from replicates.
-
-Options:
-  --help
-    Show this help information.
-
-  -l ,   --log
-    Use logged values. (default: Off)
-
-  --norm=<normalization>
-    Normalization constants for each input file provided as comma separated list of doubles (e.g. 1.0017,1.0,0.9999 ).
-
-  -o <outFileName> ,   --outFile=<outFileName>
-    Name of the output file.
-
-  -t <type> ,   --type=<type>
-    Type of variance, possible values: [sample,sqDif] for sample variance or squared difference. (default: sample)
-
-  -v ,   --verbose
-    Verbose output. (default: Off)
-
-    
-    
-    
-    
-    
+    # parseAlignment -o <outFileName> -s <trSeqFileName>  [OPTIONS] [alignment file]
+    #   Pre-computes probabilities of (observed) reads' alignments.
+    #   [alignment file] should be in either SAM or BAM format.
+    #
+    # Options:
+    # --help                                                Show this help information.
+    # --distributionFile=<distributionFileName>             Name of file to which read-distribution should be saved.
+    # --excludeSingletons                                   Exclude single mate alignments for paired-end reads. (default: Off)
+    # -e <expFileName> ,   --expressionFile=<expFileName>   Transcript relative expression estimates --- for better non-uniform read distribution estimation.
+    # --failed=<failed>                                     File name where to save names of reads that failed to align.
+    # -f <format> ,   --format=<format>                     Input format: either SAM, BAM.
+    # --lenMu=<lenMu>                                       Set mean of log fragment length distribution. (l_frag ~ LogNormal(mu,sigma^2))
+    # --lenSigma=<lenSigma>                                 Set sigma^2 (or variance) of log fragment length distribution. (l_frag ~ LogNormal(mu,sigma^2))
+    # --mateNamesDiffer                                     Mates from paired-end reads have different names. (default: Off)
+    # -l <maxAlignments> ,   --limitA=<maxAlignments>       Limit maximum number of alignments per read. (Reads with more alignments are skipped.)
+    # --noiseMismatches=<numNoiseMismatches>                Number of mismatches to be considered as noise. (default: 6)
+    # -o <outFileName> ,   --outFile=<outFileName>          Name of the output file.
+    # -P <procN> ,   --procN=<procN>                        Maximum number of threads to be used. This provides speedup mostly when using non-uniform read distribution model (i.e. no --uniform flag). (default: 4)
+    # -N <readsN> ,   --readsN=<readsN>                     Total number of reads. This is not necessary if [SB]AM contains also reads with no valid alignments.
+    # --show1warning                                        Show first alignments that are considered wrong (TID unknown, TID mismatch, wrong strand). (default: Off)
+    # -t <trInfoFileName> ,   --trInfoFile=<trInfoFileName> File to save transcript information extracted from [BS]AM file and reference.
+    # -s <trSeqFileName> ,   --trSeqFile=<trSeqFileName>    Transcript sequence in FASTA format --- for non-uniform read distribution estimation.
+    # --trSeqHeader=<trSeqHeader>                           Transcript sequence header format enables gene name extraction (standard/gencode). (default: standard)
+    # --uniform                                             Use uniform read distribution. (default: Off)
+    # --unstranded                                          Paired read are not strand specific. (default: Off)
+    # -v ,   --verbose                                      Verbose output. (default: Off)
+    # -V ,   --veryVerbose                                  Very verbose output. (default: Off)
+    #
+    # -----------------------------
+    # estimateExpression -o <outFilePrefix>  [OPTIONS] [prob file]
+    #   Estimates expression given precomputed probabilities of (observed) reads' alignments.
+    #   Uses MCMC sampling algorithm to produce relative abundance or RPKM.
+    #
+    # Options:
+    # --help                                                Show this help information.
+    # --MCMC_burnIn=<MCMC_burnIn>                           Length of sampler's burn in period. (default: 1000)
+    # --MCMC_chainsN=<MCMC_chainsN>                         Number of parallel chains used. At least two chains will be used. (default: 4)
+    # --MCMC_dirAlpha=<MCMC_dirAlpha>                       Alpha parameter for the Dirichlet distribution. (default: 1)
+    # --MCMC_samplesDOmax                                   Produce maximum number of samples (samplesNmax) in second iteration and quit. (default: Off)
+    # --MCMC_samplesN=<MCMC_samplesN>                       Initial number of samples produced. Doubles after every iteration. (default: 1000)
+    # --MCMC_samplesNmax=<MCMC_samplesNmax>                 Maximum number of samples produced in one iteration. After producing samplesNmax samples sampler finishes. (default: 50000)
+    # --MCMC_samplesSave=<MCMC_samplesSave>                 Number of samples recorder in total. (default: 1000)
+    # --MCMC_scaleReduction=<MCMC_scaleReduction>           Target scale reduction, sampler finishes after this value is met. (default: 1.2)
+    # -G ,   --gibbs                                        Use Gibbs sampling instead of collapsed Gibbs sampling. (default: Off)
+    # -o <outFilePrefix> ,   --outPrefix=<outFilePrefix>    Prefix for the output files.
+    # -O <outputType> ,   --outType=<outputType>            Output type (theta, RPKM, counts, tau). (default: theta)
+    # -p <parFileName> ,   --parFile=<parFileName>          File containing parameters for the sampler, which can be otherwise specified by --MCMC* options. As the file is checked after every MCMC iteration, the parameters can be adjusted while running.
+    # -P <procN> ,   --procN=<procN>                        Limit the maximum number of threads to be used. (Default is the number of MCMC chains.)
+    # --scaleReduction                                      Use scale reduction as stopping criterion, instead of computing effective sample size. (default: Off)
+    # -s <seed> ,   --seed=<seed>                           Random initialization seed.
+    # --thetaActFile=<thetaActFileName>                     File for logging noise parameter theta^{act}.
+    # -t <trInfoFileName> ,   --trInfoFile=<trInfoFileName> File containing transcript information. (Necessary for RPKM)
+    # -v ,   --verbose                                      Verbose output. (default: Off)
+    #
+    # -----------------------------
+    # getVariance -o <outFileName>  [OPTIONS] [sampleFiles]
+    #   Estimates variance of MCMC samples from 1 or multiple replicates.
+    #   [sample Files] should contain transposed MCMC samples from replicates.
+    #
+    # Options:
+    # --help                                                Show this help information.
+    # -l ,   --log                                          Use logged values. (default: Off)
+    # --norm=<normalization>                                Normalization constants for each input file provided as comma separated list of doubles (e.g. 1.0017,1.0,0.9999 ).
+    # -o <outFileName> ,   --outFile=<outFileName>          Name of the output file.
+    # -t <type> ,   --type=<type>                           Type of variance, possible values: [sample,sqDif] for sample variance or squared difference. (default: sample)
+    # -v ,   --verbose                                      Verbose output. (default: Off)
     
     
     
